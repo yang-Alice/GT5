@@ -55,7 +55,8 @@ def find_image_files(onechasspath):
 def add_two_image(imageone,imagetwo):
 	oneimage=np.asarray(PIL.Image.open(imageone))
 	twoimage=np.asarray(PIL.Image.open(imagetwo))
-	doubleimage=np.dstack((oneimage,twoimage))
+	doubleimage=np.stack((oneimage,twoimage),axis=0) 
+	doubleimage=doubleimage.reshape((2,1052,1914,1))
 	return doubleimage
 			
 
@@ -100,14 +101,38 @@ def create_record(rootpath):
 filenames=find_image_files('/home/yangshuhui/code/GT5data/test/1')
 print(filenames)
 
-imageone='/home/yangshuhui/code/GT5data/test/1/00117bicycle.PNG'
-imagetwo='/home/yangshuhui/code/GT5data/test/1/00117bridge.PNG'
+imageone='/home/yangshuhui/code/GT5data/test/2/00458bicycle.PNG'
+imagetwo='/home/yangshuhui/code/GT5data/test/2/04101bus.PNG'
 oneimage=np.asarray(PIL.Image.open(imageone))
 twoimage=np.asarray(PIL.Image.open(imagetwo))
 doubleimage=np.dstack((oneimage,twoimage))
 Fname=imageone.split('/')[-1][:-4]+imagetwo.split('/')[-1][:-4]
-print(Fname)
-'''
+print(doubleimage.shape)
+
+doubleimage2=np.hstack((oneimage,twoimage))
+print('hstack')
+print(doubleimage2.shape)
+
+doubleimage3=np.vstack((oneimage,twoimage))
+print('vstack')
+print(doubleimage3.shape)
+doubleimage4=np.stack((oneimage,twoimage),axis=0)
+print(doubleimage4.shape)
+doubleimage4=np.stack((oneimage,twoimage),axis=2)
+print(doubleimage4.shape)  结果：(2,1052, 1914)
 
 create_record(train_directory)
 
+imageone='/home/yangshuhui/code/GT5data/test/2/00458bicycle.PNG'
+imagetwo='/home/yangshuhui/code/GT5data/test/2/04101bus.PNG'
+oneimage=np.asarray(PIL.Image.open(imageone))
+twoimage=np.asarray(PIL.Image.open(imagetwo))
+doubleimage=np.stack((oneimage,twoimage),axis=0)
+doubleimage=doubleimage.reshape((2,1052,1914,1))
+print(doubleimage.shape)
+sum=0
+for i in range(1052):
+	for j in range(1914):
+		sum=sum+twoimage[i,j]-doubleimage[1,i,j,0]
+print(sum)
+'''
